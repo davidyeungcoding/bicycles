@@ -12,11 +12,22 @@ class Customer(object):
         self.name = name
         self.cash = cash
         
+    def affordable_bikes(self, bike_shop):
+        """Provides a list of bikes that the customer can afford"""
+        print(self.name)
+        print('Here are the bikes that fall within your budget:')
+        for bike_name, stock in bike_shop.inventory.items():
+            if stock[0].cost <= self.cash:
+                print(bike_name)
+        
     def buy(self, bike_model, bike_shop):
-        print(bike_model)
-        cost = bike_shop.sell(bike_model)
-        self.cash = self.cash - cost
-        print(self.cash)
+        """Goes through the transaction process"""
+        print(self.name)
+        print("I'd like to purchase the {}.".format(bike_model))
+        sell_price = bike_shop.sell(bike_model)
+        print('Total comes to ${}'.format(sell_price))
+        self.cash = self.cash - sell_price
+        print("Here's your change: ${}".format(self.cash))
 
 class BikeShop(object):
     
@@ -24,12 +35,13 @@ class BikeShop(object):
         self.name = name
         self.inventory = inventory
         self.profit = 0
+        
 
     def print_inventory(self):
         """Prints the inventory for the store"""
         for bike_name, stock in self.inventory.items():
             print(bike_name, ':', stock[1])
-        print(self.profit)
+        print('Total Profit = ${}'.format(self.profit))
             
     def sell(self, bike_model):
         """Subtracts stock and calculates profit"""
@@ -37,29 +49,3 @@ class BikeShop(object):
         self.inventory[bike_model] = (bike, stock - 1)
         self.profit += 0.2 * bike.cost
         return bike.cost
-        
-if __name__ == "__main__":
-    bike_1 = Bicycle('Schwinn', 'Protocol 1.0', '41 lbs.', 320.0)
-    bike_2 = Bicycle('Schwinn', 'Ladies Perla', '42 lbs.', 160.0)
-    bike_3 = Bicycle('Columbia', 'Palmetto', '38 lbs.', 140.0)
-    bike_4 = Bicycle('Cyrusher', 'XC700', '32 lbs.', 680.0)
-    bike_5 = Bicycle('Fito', 'Marina', '33 lbs.', 200.0)
-    bike_6 = Bicycle('Huffy', 'Fresno', '42 lbs.', 190.0)
-    
-    person_1 = Customer('Jhon Doe', 200.00)
-    person_2 = Customer('Jemma Cain', 500.00)
-    person_3 = Customer('Marco Reus', 1000.00)
-    
-    shop_inventory = {
-        'Protocol 1.0': (bike_1, 5),
-        'Ladies Perla': (bike_2, 5),
-        'Palmentto': (bike_3, 5),
-        'XC700': (bike_4, 5),
-        'Marina': (bike_5, 5),
-        'Fresno': (bike_6, 5)
-    }
-    
-    shop = BikeShop('Cycles', shop_inventory)
-    
-    person_2.buy('Protocol 1.0', shop)
-    shop.print_inventory()
