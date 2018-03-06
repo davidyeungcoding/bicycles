@@ -39,6 +39,7 @@ class BikeShop(object):
 
     def print_inventory(self):
         """Prints the inventory for the store"""
+        print('Inventory:')
         for bike_name, stock in self.inventory.items():
             print(bike_name, ':', stock[1])
         print('Total Profit = ${}'.format(self.profit))
